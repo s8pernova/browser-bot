@@ -29,7 +29,7 @@ logging.basicConfig(
 )
 
 
-def _cmd_run(workflow_path: Path | None) -> int:
+def _cmd_run(workflow_path: Path | None, head: bool = False) -> int:
     """Load, validate, and run a workflow."""
     if workflow_path is None:
         workflows = discover_workflows()
@@ -53,7 +53,7 @@ def _cmd_run(workflow_path: Path | None) -> int:
             print(f"  ✗ {err}")
         return 1
 
-    run_workflow(data)
+    run_workflow(data, head)
     return 0
 
 
@@ -116,6 +116,11 @@ def main(argv: list[str] | None = None) -> int:
         help="List all available workflow yaml files."
     )
     parser.add_argument(
+        "--head",
+        action="store_true",
+        help="Run Playwright with a head."
+    )
+    parser.add_argument(
         "--init",
         type=str,
         metavar="NAME",
@@ -142,7 +147,7 @@ def main(argv: list[str] | None = None) -> int:
         if args.file is None:
             print("--run requires --file <path>")
             return 1
-        return _cmd_run(args.file)
+        return _cmd_run(args.file, args.head)
 
     parser.print_help()
     return 0

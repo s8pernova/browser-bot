@@ -17,7 +17,7 @@ from app.workflow import resolve_env_values
 log = logging.getLogger(__name__)
 
 
-def run_workflow(data: dict[str, Any]) -> None:
+def run_workflow(data: dict[str, Any], head: bool = False) -> None:
     """
     Execute all steps of a parsed workflow dict.
 
@@ -26,16 +26,20 @@ def run_workflow(data: dict[str, Any]) -> None:
     """
     name = data.get("name", "unnamed")
     browser_opts = data.get("browser", {})
-    headless = browser_opts.get("headless", True)
+    
+    # If --head is passed (head=True), override YAML config and run with a head (headless=False)
+    yaml_headless = browser_opts.get("headless", True)
+    actual_headless = False if head else yaml_headless
+    
     timeout_ms = browser_opts.get("timeout_ms", 30_000)
 
     steps = resolve_env_values(data["steps"])
 
-    log.info("Running workflow: %s (%d steps, headless=%s)", name, len(steps), headless)
+    log.info("Running workflow: %s (%d steps, headless=%s)", name, len(steps), actual_headless)
 
     # ── Launch browser ──────────────────────────────────────────
     with sync_playwright() as pw:
-        browser: Browser = pw.chromium.launch(headless=headless)
+        browser: Browser = pw.chromium.launch(headless=actual_headless)
         page: Page = browser.new_page()
         page.set_default_timeout(timeout_ms)
 
