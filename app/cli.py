@@ -6,6 +6,7 @@ Contains commands like:
 - init
 """
 
+
 def main() -> int:
     """
     Main entry point for the CLI.
