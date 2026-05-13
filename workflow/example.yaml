@@ -1,0 +1,27 @@
+name: daily_report
+description: "Log in, open the report page, and take a screenshot."
+
+browser:
+  headless: true
+  timeout_ms: 30000
+
+steps:
+  - action: goto
+    url: "https://example.com/login"
+
+  - action: fill
+    selector: "#username"
+    value_from_env: "SITE_USERNAME"
+
+  - action: fill
+    selector: "#password"
+    value_from_env: "SITE_PASSWORD"
+
+  - action: click
+    selector: "button[type='submit']"
+
+  - action: wait_for
+    selector: "text=Dashboard"
+
+  - action: screenshot
+    path: "screenshots/daily-report.png"

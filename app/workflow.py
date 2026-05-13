@@ -1,0 +1,3 @@
+"""
+Loads and validates YAML.
+"""

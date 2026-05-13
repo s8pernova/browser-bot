@@ -1,2 +1,3 @@
-# browser-bot
+# Browser Bot
+
 Quick, free, self-hosted browser workflow.
