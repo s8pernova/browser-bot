@@ -34,8 +34,6 @@ def run_workflow(data: dict[str, Any]) -> None:
     log.info("Running workflow: %s (%d steps, headless=%s)", name, len(steps), headless)
 
     # ── Launch browser ──────────────────────────────────────────
-    # TODO: This part is done for you.  Read through it carefully so
-    #       you understand the sync_playwright context-manager pattern.
     with sync_playwright() as pw:
         browser: Browser = pw.chromium.launch(headless=headless)
         page: Page = browser.new_page()

@@ -36,7 +36,7 @@ def _cmd_run(workflow_path: Path | None) -> int:
         if not workflows:
             print("No workflow files found in workflow/")
             return 1
-        # If there's exactly one, use it.  Otherwise ask.
+        # If there's exactly one, use it. Otherwise ask.
         if len(workflows) == 1:
             workflow_path = workflows[0]
         else:
@@ -139,6 +139,9 @@ def main(argv: list[str] | None = None) -> int:
             return 1
         return _cmd_validate(args.file)
     if args.run:
+        if args.file is None:
+            print("--run requires --file <path>")
+            return 1
         return _cmd_run(args.file)
 
     parser.print_help()
