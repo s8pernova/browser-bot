@@ -24,61 +24,54 @@ from playwright.sync_api import Page
 # best friend:  https://playwright.dev/python/docs/api/class-page
 
 
-def do_goto(page: Page, step: dict[str, Any]) -> None:
+def do_goto(page: Page, step: dict[str, Any], timeout: int = 10000) -> None:
     """Navigate to step['url']."""
     url = step["url"]
-    # TODO: use page.goto(...)
-    raise NotImplementedError("Implement do_goto with page.goto()")
+    page.goto(url, wait_until="domcontentloaded", timeout=timeout)
 
 
 def do_click(page: Page, step: dict[str, Any]) -> None:
     """Click the element matching step['selector']."""
     selector = step["selector"]
-    # TODO: use page.click(...) or page.locator(...).click()
-    raise NotImplementedError("Implement do_click")
+    locator = page.locator(selector)
+    locator.click()
 
 
 def do_fill(page: Page, step: dict[str, Any]) -> None:
     """Type step['value'] into the element matching step['selector']."""
     selector = step["selector"]
     value = step["value"]  # already resolved by workflow.resolve_env_values()
-    # TODO: use page.fill(...)
-    raise NotImplementedError("Implement do_fill")
+    page.fill(selector, value)
 
 
 def do_wait_for(page: Page, step: dict[str, Any]) -> None:
     """Wait until step['selector'] appears on the page."""
     selector = step["selector"]
     timeout = step.get("timeout_ms")  # optional override
-    # TODO: use page.wait_for_selector(...) or page.locator(...).wait_for(...)
-    raise NotImplementedError("Implement do_wait_for")
+    page.wait_for_selector(selector, timeout=timeout)
 
 
 def do_screenshot(page: Page, step: dict[str, Any]) -> None:
     """Save a screenshot to step['path']."""
     path = step["path"]
-    # TODO: use page.screenshot(path=...)
-    raise NotImplementedError("Implement do_screenshot")
+    page.screenshot(path=path)
 
 
 def do_download(page: Page, step: dict[str, Any]) -> None:
     """Handle a download triggered by clicking step['selector']."""
     selector = step.get("selector", "")
     save_as = step.get("path", "downloads/file")
-    # TODO: This one's trickier — look into page.expect_download()
-    #       with page.expect_download() as download_info:
-    #           page.click(selector)
-    #       download = download_info.value
-    #       download.save_as(save_as)
-    raise NotImplementedError("Implement do_download")
+    with page.expect_download() as download_info:
+        page.click(selector)
+    download = download_info.value
+    download.save_as(save_as)
 
 
 def do_select(page: Page, step: dict[str, Any]) -> None:
     """Select an option from a native <select> element by value."""
     selector = step["selector"]
     value = step["value"]
-    # TODO: use page.select_option(...)
-    raise NotImplementedError("Implement do_select with page.select_option()")
+    page.select_option(selector, value)
 
 
 def do_notify(page: Page, step: dict[str, Any]) -> None:
