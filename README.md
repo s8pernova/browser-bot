@@ -22,7 +22,7 @@ To set up a daily scheduled task for a specific workflow, use the `install-syste
 
 **Example:**
 ```bash
-./ops/install-systemd.sh brianna-voting-browser-bot workflows/vote_for_brianna.yaml
+./ops/install-systemd.sh brianna-voting-browser-bot workflows/vote-for-brianna.yaml
 ```
 
 By default, the template triggers every day at 8:00 AM local time.
