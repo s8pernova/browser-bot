@@ -62,6 +62,3 @@ systemctl daemon-reload
 systemctl enable --now "$TIMER_NAME"
 
 echo "Installation complete."
-echo "Check timer:   systemctl status $TIMER_NAME"
-echo "Check service: systemctl status $SERVICE_NAME"
-echo "View logs:     journalctl -u $SERVICE_NAME -n 100 --no-pager"
