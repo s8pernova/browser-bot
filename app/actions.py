@@ -17,7 +17,6 @@ from typing import Any
 
 from playwright.sync_api import Page
 
-
 # ── Action handlers ─────────────────────────────────────────────────
 # Each function takes (page, step) and performs ONE browser action.
 # Fill in the Playwright calls yourself — the Page API docs are your
@@ -84,12 +83,12 @@ def do_notify(page: Page, step: dict[str, Any]) -> None:
 # Maps action name → handler function.  The runner uses this.
 
 ACTION_DISPATCH: dict[str, Any] = {
-    "goto":       do_goto,
-    "click":      do_click,
-    "fill":       do_fill,
-    "wait_for":   do_wait_for,
+    "goto": do_goto,
+    "click": do_click,
+    "fill": do_fill,
+    "wait_for": do_wait_for,
     "screenshot": do_screenshot,
-    "download":   do_download,
-    "select":     do_select,
-    "notify":     do_notify,
+    "download": do_download,
+    "select": do_select,
+    "notify": do_notify,
 }

@@ -10,33 +10,43 @@ from typing import Any
 
 import yaml
 
-
 # ── Schema Constants ────────────────────────────────────────────────
 WORKFLOW_DIR = Path("workflow")
 
-VALID_ACTIONS = {"goto", "click", "fill", "select", "wait_for", "screenshot", "download", "notify"}
+VALID_ACTIONS = {
+    "goto",
+    "click",
+    "fill",
+    "select",
+    "wait_for",
+    "screenshot",
+    "download",
+    "notify",
+}
 
 # Fields that are required per-action.  Everything else is optional.
 REQUIRED_FIELDS: dict[str, set[str]] = {
-    "goto":       {"url"},
-    "click":      {"selector"},
-    "fill":       {"selector"},              # must also have value OR value_from_env
-    "wait_for":   {"selector"},
+    "goto": {"url"},
+    "click": {"selector"},
+    "fill": {"selector"},  # must also have value OR value_from_env
+    "wait_for": {"selector"},
     "screenshot": {"path"},
-    "download":   set(),
-    "select":     {"selector", "value"},
-    "notify":     {"message"},
+    "download": set(),
+    "select": {"selector", "value"},
+    "notify": {"message"},
 }
 
 
 # ── Public helpers ──────────────────────────────────────────────────
+
 
 def discover_workflows() -> list[Path]:
     """Return a sorted list of .yaml / .yml files in WORKFLOW_DIR."""
     if not WORKFLOW_DIR.is_dir():
         return []
     return sorted(
-        p for p in WORKFLOW_DIR.iterdir()
+        p
+        for p in WORKFLOW_DIR.iterdir()
         if p.suffix in (".yaml", ".yml") and p.name != "example.yaml"
     )
 
@@ -50,7 +60,9 @@ def load_workflow(path: Path) -> dict[str, Any]:
     with open(path) as f:
         data = yaml.safe_load(f)
     if not isinstance(data, dict):
-        raise ValueError(f"{path}: top-level value must be a mapping, got {type(data).__name__}")
+        raise ValueError(
+            f"{path}: top-level value must be a mapping, got {type(data).__name__}"
+        )
     return data
 
 

@@ -9,7 +9,7 @@ from __future__ import annotations
 import logging
 from typing import Any
 
-from playwright.sync_api import sync_playwright, Browser, Page
+from playwright.sync_api import Browser, Page, sync_playwright
 
 from app.actions import ACTION_DISPATCH
 from app.workflow import resolve_env_values
@@ -26,16 +26,21 @@ def run_workflow(data: dict[str, Any], head: bool = False) -> None:
     """
     name = data.get("name", "unnamed")
     browser_opts = data.get("browser", {})
-    
+
     # If --head is passed (head=True), override YAML config and run with a head (headless=False)
     yaml_headless = browser_opts.get("headless", True)
     actual_headless = False if head else yaml_headless
-    
+
     timeout_ms = browser_opts.get("timeout_ms", 30_000)
 
     steps = resolve_env_values(data["steps"])
 
-    log.info("Running workflow: %s (%d steps, headless=%s)", name, len(steps), actual_headless)
+    log.info(
+        "Running workflow: %s (%d steps, headless=%s)",
+        name,
+        len(steps),
+        actual_headless,
+    )
 
     # ── Launch browser ──────────────────────────────────────────
     with sync_playwright() as pw:

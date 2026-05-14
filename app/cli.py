@@ -13,13 +13,13 @@ import sys
 from argparse import ArgumentParser
 from pathlib import Path
 
+from app.runner import run_workflow
 from app.workflow import (
     WORKFLOW_DIR,
     discover_workflows,
     load_workflow,
     validate_workflow,
 )
-from app.runner import run_workflow
 
 logging.basicConfig(
     level=logging.INFO,
@@ -28,7 +28,7 @@ logging.basicConfig(
     handlers=[
         logging.FileHandler(Path("logs/browser-bot.log")),
         logging.StreamHandler(sys.stdout),
-    ]
+    ],
 )
 
 
@@ -100,40 +100,33 @@ def _cmd_init(name: str) -> int:
 
 
 def main(argv: list[str] | None = None) -> int:
-    parser = ArgumentParser(
-        description="Run YAML browser workflows"
-    )
+    parser = ArgumentParser(description="Run YAML browser workflows")
     parser.add_argument(
         "--run",
         action="store_true",
-        help="Run a workflow. workflow/ directory is scanned for yaml files."
+        help="Run a workflow. workflow/ directory is scanned for yaml files.",
     )
     parser.add_argument(
-        "--validate",
-        action="store_true",
-        help="Validate a workflow yaml file."
+        "--validate", action="store_true", help="Validate a workflow yaml file."
     )
     parser.add_argument(
-        "--list",
-        action="store_true",
-        help="List all available workflow yaml files."
+        "--list", action="store_true", help="List all available workflow yaml files."
     )
     parser.add_argument(
-        "--head",
-        action="store_true",
-        help="Run Playwright with a head."
+        "--head", action="store_true", help="Run Playwright with a head."
     )
     parser.add_argument(
         "--init",
         type=str,
         metavar="NAME",
-        help="Generate a new workflow yaml file with example steps."
+        help="Generate a new workflow yaml file with example steps.",
     )
     parser.add_argument(
-        "--file", "-f",
+        "--file",
+        "-f",
         type=Path,
         default=None,
-        help="Path to a specific workflow yaml file."
+        help="Path to a specific workflow yaml file.",
     )
     args = parser.parse_args(argv)
 
