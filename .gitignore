@@ -223,5 +223,5 @@ workflows/*
 
 # Systemd
 ops/systemd/*
-!ops/systemd/browser-bot.service.example
-!ops/systemd/browser-bot.timer.example
+!ops/systemd/browser-bot.service.template
+!ops/systemd/browser-bot.timer.template

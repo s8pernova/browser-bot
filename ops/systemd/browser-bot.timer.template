@@ -1,5 +1,5 @@
 [Unit]
-Description=Timer to run Browser Bot daily
+Description=Timer to run Browser Bot
 
 [Timer]
 # Run the bot every day at 08:00 AM local time

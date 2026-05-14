@@ -1,11 +1,19 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-SERVICE_NAME="browser-bot.service"
-TIMER_NAME="browser-bot.timer"
+if [[ $# -ne 1 ]]; then
+    echo "Usage: $0 <service-prefix-name>"
+    echo "Example: $0 brianna-voting-browser-bot"
+    exit 1
+fi
+
+SERVICE_PREFIX="$1"
+SERVICE_NAME="${SERVICE_PREFIX}.service"
+TIMER_NAME="${SERVICE_PREFIX}.timer"
+
 SYSTEMD_USER_DIR="${HOME}/.config/systemd/user"
 
-echo "Uninstalling systemd user units..."
+echo "Uninstalling systemd user units for $SERVICE_PREFIX..."
 
 # Stop and disable the timer
 echo "Stopping and disabling timer..."
