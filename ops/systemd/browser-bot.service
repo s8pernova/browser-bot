@@ -1,0 +1,22 @@
+[Unit]
+Description=Browser Bot Playwright Automation
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+# Set the working directory to the project root
+WorkingDirectory=%h/git-projects/browser-bot
+
+# Load environment variables from .env if present
+EnvironmentFile=-%h/git-projects/browser-bot/ops/.env
+
+# Run the python module inside the virtual environment
+# We specify the exact path to the venv's python binary
+ExecStart=%h/git-projects/browser-bot/.venv/bin/python -m app.cli --run -f workflows/vote_for_brianna.yaml
+
+# If the bot takes longer than 5 minutes, kill it
+TimeoutStartSec=300
+
+[Install]
+WantedBy=default.target

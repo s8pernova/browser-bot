@@ -21,11 +21,14 @@ from app.workflow import (
 )
 from app.runner import run_workflow
 
-
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(message)s",
     datefmt="%H:%M:%S",
+    handlers=[
+        logging.FileHandler(Path("logs/browser-bot.log")),
+        logging.StreamHandler(sys.stdout),
+    ]
 )
 
 
