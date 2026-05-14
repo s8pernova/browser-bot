@@ -11,6 +11,7 @@ from __future__ import annotations
 import logging
 import sys
 from argparse import ArgumentParser
+from datetime import datetime
 from pathlib import Path
 
 from app.runner import run_workflow
@@ -21,12 +22,17 @@ from app.workflow import (
     validate_workflow,
 )
 
+log_dir = Path("logs")
+log_dir.mkdir(exist_ok=True)
+timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+log_file = log_dir / f"{timestamp}.log"
+
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(message)s",
     datefmt="%H:%M:%S",
     handlers=[
-        logging.FileHandler(Path("logs/browser-bot.log")),
+        logging.FileHandler(log_file),
         logging.StreamHandler(sys.stdout),
     ],
 )

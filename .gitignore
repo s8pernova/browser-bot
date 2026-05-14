@@ -225,3 +225,6 @@ workflows/*
 ops/systemd/*
 !ops/systemd/browser-bot.service.template
 !ops/systemd/browser-bot.timer.template
+
+# Logs
+logs/*
