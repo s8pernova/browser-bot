@@ -8,8 +8,7 @@ OnCalendar=*-*-* 08:00:00
 # If the computer was asleep/off at the scheduled time, run immediately upon waking up
 Persistent=true
 
-# Wait a random amount of time (up to 10 minutes) before running to prevent 
-# multiple automated jobs from hammering the network at the exact same second
+# Wait a random amount of time (up to 10 minutes) before running to prevent multiple automated jobs from hammering the network at the exact same second
 RandomizedDelaySec=600
 
 [Install]
