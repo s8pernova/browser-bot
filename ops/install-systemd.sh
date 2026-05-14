@@ -2,8 +2,8 @@
 set -euo pipefail
 
 if [[ $EUID -ne 0 ]]; then
-   echo "This script must be run as root. Please use sudo."
-   exit 1
+    echo "This script must be run as root. Use sudo."
+    exit 1
 fi
 
 if [[ $# -ne 2 ]]; then
@@ -19,30 +19,49 @@ SERVICE_NAME="${SERVICE_PREFIX}.service"
 TIMER_NAME="${SERVICE_PREFIX}.timer"
 
 EXEC_USER="${EXEC_USER:-deploy}"
-
-# The directory where systemd user units should be placed
 SYSTEMD_DIR="/etc/systemd/system"
 
-# Get the directory of this script to locate the systemd files relative to it
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 
+SERVICE_TEMPLATE="${SCRIPT_DIR}/systemd/browser-bot.service.template"
+TIMER_TEMPLATE="${SCRIPT_DIR}/systemd/browser-bot.timer.template"
+
+if [[ ! -f "$SERVICE_TEMPLATE" ]]; then
+    echo "Missing service template: $SERVICE_TEMPLATE"
+    exit 1
+fi
+
+if [[ ! -f "$TIMER_TEMPLATE" ]]; then
+    echo "Missing timer template: $TIMER_TEMPLATE"
+    exit 1
+fi
+
+if [[ ! -f "${PROJECT_ROOT}/${WORKFLOW_FILE}" ]]; then
+    echo "Missing workflow file: ${PROJECT_ROOT}/${WORKFLOW_FILE}"
+    exit 1
+fi
+
+if [[ ! -x "${PROJECT_ROOT}/.venv/bin/python" ]]; then
+    echo "Missing executable venv Python: ${PROJECT_ROOT}/.venv/bin/python"
+    exit 1
+fi
+
 echo "Installing system-wide systemd units for $SERVICE_PREFIX as $EXEC_USER..."
+echo "Project root: $PROJECT_ROOT"
 
-# Copy and template the unit files
-echo "Generating unit files to $SYSTEMD_DIR..."
-sed "s|{{WORKFLOW_FILE}}|$WORKFLOW_FILE|g; s|{{PROJECT_ROOT}}|$PROJECT_ROOT|g; s|{{EXEC_USER}}|$EXEC_USER|g" \
-  "$SCRIPT_DIR/systemd/browser-bot.service.template" > "$SYSTEMD_DIR/$SERVICE_NAME"
+sed \
+    -e "s|{{WORKFLOW_FILE}}|$WORKFLOW_FILE|g" \
+    -e "s|{{PROJECT_ROOT}}|$PROJECT_ROOT|g" \
+    -e "s|{{EXEC_USER}}|$EXEC_USER|g" \
+    "$SERVICE_TEMPLATE" > "$SYSTEMD_DIR/$SERVICE_NAME"
 
-# The timer doesn't need templating currently, so we just copy it
-cp "$SCRIPT_DIR/systemd/browser-bot.timer.template" "$SYSTEMD_DIR/$TIMER_NAME"
+cp "$TIMER_TEMPLATE" "$SYSTEMD_DIR/$TIMER_NAME"
 
-# Reload systemd user daemon so it recognizes the new files
-echo "Reloading systemd daemon..."
 systemctl daemon-reload
-
-# Enable and start the timer
-echo "Enabling and starting the timer..."
 systemctl enable --now "$TIMER_NAME"
 
 echo "Installation complete."
+echo "Check timer:   systemctl status $TIMER_NAME"
+echo "Check service: systemctl status $SERVICE_NAME"
+echo "View logs:     journalctl -u $SERVICE_NAME -n 100 --no-pager"

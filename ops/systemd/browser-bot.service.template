@@ -5,18 +5,12 @@ Wants=network-online.target
 
 [Service]
 Type=oneshot
-# Set the working directory to the project root
-WorkingDirectory=%h/srv/browser-bot
-
-# Load environment variables from .env if present
-EnvironmentFile=-%h/srv/browser-bot/ops/.env
-
-# Run the python module inside the virtual environment
-# We specify the exact path to the venv's python binary
-ExecStart=%h/srv/browser-bot/.venv/bin/python -m app.cli --run -f {{WORKFLOW_FILE}}
-
-# If the bot takes longer than 5 minutes, kill it
+User={{EXEC_USER}}
+Group={{EXEC_USER}}
+WorkingDirectory={{PROJECT_ROOT}}
+EnvironmentFile=-{{PROJECT_ROOT}}/ops/.env
+ExecStart={{PROJECT_ROOT}}/.venv/bin/python -m app.cli --run -f {{WORKFLOW_FILE}}
 TimeoutStartSec=300
 
 [Install]
-WantedBy=default.target
+WantedBy=multi-user.target
