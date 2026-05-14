@@ -40,8 +40,3 @@ echo "Enabling and starting the timer..."
 systemctl --user enable --now "$TIMER_NAME"
 
 echo "Installation complete."
-echo ""
-echo "Useful commands:"
-echo "  Check timer status:   systemctl --user status $TIMER_NAME"
-echo "  Check service status: systemctl --user status $SERVICE_NAME"
-echo "  View execution logs:  journalctl --user -u $SERVICE_NAME -f"
