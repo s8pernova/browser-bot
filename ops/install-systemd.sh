@@ -18,7 +18,7 @@ WORKFLOW_FILE="$2"
 SERVICE_NAME="${SERVICE_PREFIX}.service"
 TIMER_NAME="${SERVICE_PREFIX}.timer"
 
-EXEC_USER="${SUDO_USER:-deploy}"
+EXEC_USER="${EXEC_USER:-deploy}"
 
 # The directory where systemd user units should be placed
 SYSTEMD_DIR="/etc/systemd/system"
