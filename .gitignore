@@ -217,6 +217,11 @@ __marimo__/
 # Streamlit
 .streamlit/secrets.toml
 
-# Custom
+# Workflows
 workflows/*
 !workflows/example.yaml
+
+# Systemd
+ops/systemd/*
+!ops/systemd/browser-bot.service.example
+!ops/systemd/browser-bot.timer.example
