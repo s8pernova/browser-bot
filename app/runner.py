@@ -17,7 +17,7 @@ from app.workflow import resolve_env_values
 log = logging.getLogger(__name__)
 
 
-def run_workflow(data: dict[str, Any], head: bool = False) -> None:
+def run_workflow(data: dict[str, Any], head: bool = False, pause: bool = False) -> None:
     """
     Execute all steps of a parsed workflow dict.
 
@@ -58,6 +58,9 @@ def run_workflow(data: dict[str, Any], head: bool = False) -> None:
 
                 log.info("Step %d: %s", i, action)
                 handler(page, step)
+
+                if pause:
+                    page.pause()
 
         except Exception:
             # Save a failure screenshot so you can see what went wrong
